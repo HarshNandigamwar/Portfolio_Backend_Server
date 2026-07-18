@@ -68,4 +68,22 @@ export const uploadCertificate = async (req, res) => {
 };
 
 // Get All Certificates Controller
-f
+export const getCertificates = async (req, res) => {
+  try {
+    const certificates = await Certificate.find().sort({ createdAt: -1 });
+
+    return res.status(200).json({
+      success: true,
+      count: certificates.length,
+      message: "Certificates fetched successfully!",
+      data: certificates,
+    });
+  } catch (error) {
+    console.error("Error in getCertificates:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+      error: error.message,
+    });
+  }
+};

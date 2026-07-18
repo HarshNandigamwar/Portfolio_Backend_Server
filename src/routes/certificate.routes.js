@@ -1,9 +1,18 @@
 import { Router } from "express";
-import { uploadCertificate } from "../controllers/certificate.controller.js";
+import {
+  uploadCertificate,
+  getCertificates,
+} from "../controllers/certificate.controller.js";
 import { upload } from "../middlewares/multer.middleware.js";
 
 const router = Router();
 
-router.post("/upload", upload.single("certificateImage"), uploadCertificate);
-
+// Upload Certificate
+router.post(
+  "/upload_certificate",
+  upload.single("certificateImage"),
+  uploadCertificate,
+);
+// Get Certificates
+router.get("/get_certificates", getCertificates);
 export default router;
