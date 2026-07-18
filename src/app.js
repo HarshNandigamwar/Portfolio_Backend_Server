@@ -1,5 +1,6 @@
 import express from "express";
 import cors from "cors";
+import certificateRouter from "./routes/certificate.routes.js";
 
 const app = express();
 
@@ -21,5 +22,7 @@ app.get("/awake", (req, res) => {
   });
 });
 
-export default app;
+// Upload Certificate
+app.use("/api/v1/certificates", certificateRouter);
 
+export default app;

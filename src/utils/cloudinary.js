@@ -10,17 +10,20 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-const uploadOnCloudinary = async (localFilePath) => {
+const uploadOnCloudinary = async (localFilePath, folderName = "general") => {
   try {
     if (!localFilePath) return null;
+    console.log(`Image Upload Start in folder: portfolio_server/${folderName}`);
 
     const response = await cloudinary.uploader.upload(localFilePath, {
       resource_type: "auto",
-      folder: "portfolio_server/portfolio_certificates",
+      folder: `portfolio_server/${folderName}`,
+      timeout: 60000,
     });
+
+    console.log("Image uploaded successfully to Cloudinary");
     fs.unlinkSync(localFilePath);
     return response;
-    console.log(response);
   } catch (error) {
     if (fs.existsSync(localFilePath)) {
       fs.unlinkSync(localFilePath);
