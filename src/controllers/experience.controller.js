@@ -1,6 +1,7 @@
 import { Experience } from "../models/experience.model.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 
+//Upload Experience Controller
 export const uploadExperience = async (req, res) => {
   try {
     const {
@@ -78,6 +79,27 @@ export const uploadExperience = async (req, res) => {
     });
   } catch (error) {
     console.error("Error in uploadExperience:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+      error: error.message,
+    });
+  }
+};
+
+//Get Experience Controller
+export const getExperiences = async (req, res) => {
+  try {
+    const experiences = await Experience.find().sort({ createdAt: -1 });
+
+    return res.status(200).json({
+      success: true,
+      count: experiences.length,
+      message: "Experiences fetched successfully!",
+      data: experiences,
+    });
+  } catch (error) {
+    console.error("Error in getExperiences:", error);
     return res.status(500).json({
       success: false,
       message: "Internal Server Error",
