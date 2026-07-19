@@ -9,10 +9,10 @@ const router = Router();
 
 // Upload Certificate
 router.post(
-  "/upload_certificate",
+  "/upload_certificate", 
   upload.single("certificateImage"),
   uploadCertificate,
 );
 // Get Certificates
-router.get("/get_certificates", getCertificates);
+router.get("/get_certificate", getCertificates);
 export default router;
