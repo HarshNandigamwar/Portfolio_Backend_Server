@@ -32,12 +32,10 @@ export const uploadCourse = async (req, res) => {
     );
 
     if (!cloudinaryResponse) {
-      return res
-        .status(500)
-        .json({
-          success: false,
-          message: "Failed to upload image to Cloudinary",
-        });
+      return res.status(500).json({
+        success: false,
+        message: "Failed to upload image to Cloudinary",
+      });
     }
 
     const newCourse = await Course.create({
@@ -55,12 +53,31 @@ export const uploadCourse = async (req, res) => {
     });
   } catch (error) {
     console.error("Error in uploadCourse:", error);
-    return res
-      .status(500)
-      .json({
-        success: false,
-        message: "Internal Server Error",
-        error: error.message,
-      });
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+      error: error.message,
+    });
+  }
+};
+
+//Get Course Controller
+export const getCourses = async (req, res) => {
+  try {
+    const courses = await Course.find().sort({ createdAt: -1 });
+
+    return res.status(200).json({
+      success: true,
+      count: courses.length,
+      message: "Courses fetched successfully!",
+      data: courses,
+    });
+  } catch (error) {
+    console.error("Error in getCourses:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+      error: error.message,
+    });
   }
 };
