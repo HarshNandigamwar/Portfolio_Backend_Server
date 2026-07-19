@@ -3,6 +3,7 @@ import cors from "cors";
 import certificateRouter from "./routes/certificate.routes.js";
 import projectRouter from "./routes/project.routes.js";
 import courseRouter from "./routes/course.routes.js";
+import experienceRouter from "./routes/experience.routes.js";
 
 const app = express();
 
@@ -32,5 +33,8 @@ app.use("/api/v1/projects", projectRouter);
 
 // Course Route
 app.use("/api/v1/courses", courseRouter);
+
+//Experience Route
+app.use('/api/v1/experiences', experienceRouter);
 
 export default app;

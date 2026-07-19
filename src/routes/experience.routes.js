@@ -5,6 +5,10 @@ import { upload } from "../middlewares/multer.middleware.js";
 const router = Router();
 
 //  Upload Experience
-router.post("/upload", upload.single("certificateImage"), uploadExperience);
+router.post(
+  "/upload_experience",
+  upload.single("certificateImage"),
+  uploadExperience,
+);
 
 export default router;
