@@ -30,7 +30,7 @@ const certificateSchema = new mongoose.Schema(
       trim: true,
     },
     certificateImage: {
-      type: String, // Cloudinary URL
+      type: String,
       required: true,
     },
   },

@@ -21,7 +21,7 @@ const courseSchema = new mongoose.Schema(
       required: true,
     },
     certificateImage: {
-      type: String, // Cloudinary URL
+      type: String,
       required: true,
     },
   },

@@ -13,7 +13,7 @@ const projectSchema = new mongoose.Schema(
       trim: true,
     },
     projectImage: {
-      type: String, // Cloudinary URL
+      type: String,
       required: true,
     },
     githubFrontendLink: {
@@ -29,7 +29,7 @@ const projectSchema = new mongoose.Schema(
       trim: true,
     },
     techStack: {
-      type: [String], // Array of strings (multiple data)
+      type: [String],
       required: true,
     },
   },

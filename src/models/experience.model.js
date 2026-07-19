@@ -3,17 +3,17 @@ import mongoose from "mongoose";
 const experienceSchema = new mongoose.Schema(
   {
     dateRange: {
-      type: String, // ex: "Feb 2025 – Mar 2025"
+      type: String,
       required: true,
       trim: true,
     },
     post: {
-      type: String, // ex: "Web Development Intern"
+      type: String,
       required: true,
       trim: true,
     },
     organization: {
-      type: String, // ex: "SkillCraft Technology"
+      type: String,
       required: true,
       trim: true,
     },
@@ -23,23 +23,23 @@ const experienceSchema = new mongoose.Schema(
       trim: true,
     },
     roles: {
-      type: [String], // Array of roles/responsibilities
+      type: [String],
       required: true,
     },
     techStack: {
-      type: [String], // Array of tech used
+      type: [String],
       required: true,
     },
     certificateId: {
-      type: String, // ex: "SCT/FEB25/5707"
+      type: String,
       trim: true,
     },
     downloadLink: {
-      type: String, // Credential download link if any
+      type: String,
       trim: true,
     },
     certificateImage: {
-      type: String, // Cloudinary URL
+      type: String,
       required: true,
     },
   },
