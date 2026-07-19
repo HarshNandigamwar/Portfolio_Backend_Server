@@ -8,6 +8,6 @@ const router = Router();
 router.post("/upload_course", upload.single("certificateImage"), uploadCourse);
 
 //Get Course Route
-router.get("/get_course", getCourses) ;
+router.get("/get_course", getCourses);
 
 export default router;
