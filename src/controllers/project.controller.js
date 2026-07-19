@@ -58,7 +58,6 @@ export const uploadProject = async (req, res) => {
       techStack: parsedTechStack,
       projectImage: cloudinaryResponse.secure_url,
     });
-    console.log("Backend Link Received:", githubBackendLink);
 
     return res.status(201).json({
       success: true,
