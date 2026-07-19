@@ -1,6 +1,7 @@
 import { Project } from "../models/project.model.js";
 import { uploadOnCloudinary } from "../utils/cloudinary.js";
 
+// Upload Project Controller
 export const uploadProject = async (req, res) => {
   try {
     const {
@@ -66,6 +67,27 @@ export const uploadProject = async (req, res) => {
     });
   } catch (error) {
     console.error("Error in uploadProject:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+      error: error.message,
+    });
+  }
+};
+
+// Get All Projects Controller
+export const getProjects = async (req, res) => {
+  try {
+    const projects = await Project.find().sort({ createdAt: -1 });
+
+    return res.status(200).json({
+      success: true,
+      message: "Projects fetched successfully!",
+      count: projects.length,
+      data: projects,
+    });
+  } catch (error) {
+    console.error("Error in getProjects:", error);
     return res.status(500).json({
       success: false,
       message: "Internal Server Error",
