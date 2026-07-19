@@ -1,5 +1,8 @@
 import { Router } from "express";
-import { uploadExperience } from "../controllers/experience.controller.js";
+import {
+  uploadExperience,
+  getExperiences,
+} from "../controllers/experience.controller.js";
 import { upload } from "../middlewares/multer.middleware.js";
 
 const router = Router();
@@ -10,5 +13,7 @@ router.post(
   upload.single("certificateImage"),
   uploadExperience,
 );
+// Get Experience
+router.get("/get_experience", getExperiences);
 
 export default router;
