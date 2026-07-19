@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import certificateRouter from "./routes/certificate.routes.js";
 import projectRouter from "./routes/project.routes.js";
+import courseRouter from "./routes/course.routes.js";
 
 const app = express();
 
@@ -28,4 +29,8 @@ app.use("/api/v1/certificates", certificateRouter);
 
 // Project Route
 app.use("/api/v1/projects", projectRouter);
+
+// Course Route
+app.use("/api/v1/courses", courseRouter);
+
 export default app;
