@@ -58,11 +58,6 @@ app.get("/", (req, res) => {
         description: "Check if server is live",
       },
       certificates: {
-        upload: {
-          method: "POST",
-          path: `/api/${process.env.API_VERSION || "v1"}/certificates/upload`,
-          description: "Upload a new certificate (Form-Data with Image)",
-        },
         getAll: {
           method: "GET",
           path: `/api/${process.env.API_VERSION || "v1"}/certificates/get_certificate`,
@@ -70,12 +65,6 @@ app.get("/", (req, res) => {
         },
       },
       projects: {
-        upload: {
-          method: "POST",
-          path: `/api/${process.env.API_VERSION || "v1"}/projects/upload_project`,
-          description:
-            "Upload a new project (Form-Data with Image and techStack string)",
-        },
         getAll: {
           method: "GET",
           path: `/api/${process.env.API_VERSION || "v1"}/projects/get_project`,
@@ -83,11 +72,6 @@ app.get("/", (req, res) => {
         },
       },
       courses: {
-        upload: {
-          method: "POST",
-          path: `/api/${process.env.API_VERSION || "v1"}/courses/upload_course`,
-          description: "Upload a new course details (Form-Data with Image)",
-        },
         getAll: {
           method: "GET",
           path: `/api/${process.env.API_VERSION || "v1"}/courses/get_course`,
@@ -95,11 +79,6 @@ app.get("/", (req, res) => {
         },
       },
       experiences: {
-        upload: {
-          method: "POST",
-          path: `/api/${process.env.API_VERSION || "v1"}/experiences/upload_experience`,
-          description: "Upload a new work experience (Form-Data with Image)",
-        },
         getAll: {
           method: "GET",
           path: `/api/${process.env.API_VERSION || "v1"}/experiences/get_experience`,
