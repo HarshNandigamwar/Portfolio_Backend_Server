@@ -23,11 +23,13 @@ export const verifyToken = (token) => {
 
     if (!payloadBase64 || !signature) return false;
 
-    // Recompute signature and compare securely (prevents timing attacks)
     const expectedSignature = crypto
       .createHmac("sha256", process.env.TOKEN_SECRET)
       .update(payloadBase64)
       .digest("hex");
+
+    // Signature length must match before timingSafeEqual, else it throws
+    if (signature.length !== expectedSignature.length) return false;
 
     const isValidSignature = crypto.timingSafeEqual(
       Buffer.from(signature),
@@ -38,7 +40,6 @@ export const verifyToken = (token) => {
 
     const payload = JSON.parse(Buffer.from(payloadBase64, "base64").toString());
 
-    // Check expiry
     if (Date.now() > payload.expiresAt) return false;
 
     return true;

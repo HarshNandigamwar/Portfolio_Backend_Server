@@ -4,6 +4,7 @@ import certificateRouter from "./routes/certificate.routes.js";
 import projectRouter from "./routes/project.routes.js";
 import courseRouter from "./routes/course.routes.js";
 import experienceRouter from "./routes/experience.routes.js";
+import authRouter from "./routes/auth.routes.js"; // new
 
 const app = express();
 const allowedOrigins = [
@@ -88,6 +89,9 @@ app.get("/awake", (req, res) => {
     message: "Server is up and running smoothly!",
   });
 });
+
+// Auth Route
+app.use(`/api/${process.env.API_VERSION || "v1"}/auth`, authRouter);
 
 // Certificate Route
 app.use(

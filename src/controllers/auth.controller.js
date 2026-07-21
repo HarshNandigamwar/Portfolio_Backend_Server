@@ -1,12 +1,11 @@
-import { generateToken } from "../utils/token.js";
 import crypto from "crypto";
+import { generateToken } from "../utils/token.js";
 
 // Helper: constant-time string comparison to prevent timing attacks
 const safeCompare = (a, b) => {
   const bufA = Buffer.from(String(a));
   const bufB = Buffer.from(String(b));
 
-  // Lengths must match for timingSafeEqual, so pad/reject early if different
   if (bufA.length !== bufB.length) return false;
 
   return crypto.timingSafeEqual(bufA, bufB);
@@ -32,10 +31,8 @@ export const adminLogin = async (req, res) => {
         .json({ success: false, message: "Invalid email or password!" });
     }
 
-    // Generate a signed token valid for 24 hours
     const token = generateToken();
 
-    // Send token as an httpOnly cookie (safer than storing in localStorage)
     res.cookie("adminToken", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
@@ -57,7 +54,7 @@ export const adminLogin = async (req, res) => {
   }
 };
 
-// Admin Logout Controller (bonus — clears the cookie)
+// Admin Logout Controller
 export const adminLogout = async (req, res) => {
   try {
     res.clearCookie("adminToken");
@@ -73,4 +70,13 @@ export const adminLogout = async (req, res) => {
       error: error.message,
     });
   }
+};
+
+// Check Auth Status Controller (useful for frontend to verify login on page load)
+export const checkAuthStatus = async (req, res) => {
+  // If this runs, checkAdminPassword middleware already validated the token
+  return res.status(200).json({
+    success: true,
+    message: "Authenticated",
+  });
 };
