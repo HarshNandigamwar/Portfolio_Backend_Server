@@ -4,12 +4,14 @@ import {
   getExperiences,
 } from "../controllers/experience.controller.js";
 import { upload } from "../middlewares/multer.middleware.js";
+import { checkAdminPassword } from "../middlewares/authMiddleware.js";
 
 const router = Router();
 
 //  Upload Experience
 router.post(
   "/upload_experience",
+  checkAdminPassword,
   upload.single("certificateImage"),
   uploadExperience,
 );

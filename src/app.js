@@ -6,14 +6,6 @@ import courseRouter from "./routes/course.routes.js";
 import experienceRouter from "./routes/experience.routes.js";
 
 const app = express();
-
-// Middlewares
-// app.use(
-//   cors({
-//     origin: process.env.CORS_ORIGIN1 || process.env.CORS_ORIGIN2,
-//     credentials: true,
-//   }),
-// );
 const allowedOrigins = [
   process.env.CORS_ORIGIN1,
   process.env.CORS_ORIGIN2,
@@ -39,7 +31,7 @@ app.get("/", (req, res) => {
   res.status(200).json({
     success: true,
     message: "Welcome to Shriharsh's Portfolio Backend Server API!",
-    version: "1.0.0",
+    version: "3.0.0",
     status: "Active & Healthy",
 
     developer: {
@@ -61,28 +53,28 @@ app.get("/", (req, res) => {
         getAll: {
           method: "GET",
           path: `/api/${process.env.API_VERSION || "v1"}/certificates/get_certificate`,
-          description: "Fetch all uploaded certificates",
+          description: "Fetch all certificates",
         },
       },
       projects: {
         getAll: {
           method: "GET",
           path: `/api/${process.env.API_VERSION || "v1"}/projects/get_project`,
-          description: "Fetch all uploaded projects",
+          description: "Fetch all projects",
         },
       },
       courses: {
         getAll: {
           method: "GET",
           path: `/api/${process.env.API_VERSION || "v1"}/courses/get_course`,
-          description: "Fetch all uploaded courses",
+          description: "Fetch all courses",
         },
       },
       experiences: {
         getAll: {
           method: "GET",
           path: `/api/${process.env.API_VERSION || "v1"}/experiences/get_experience`,
-          description: "Fetch all uploaded experiences",
+          description: "Fetch all experiences",
         },
       },
     },

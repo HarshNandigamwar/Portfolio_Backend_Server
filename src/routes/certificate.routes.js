@@ -4,12 +4,14 @@ import {
   getCertificates,
 } from "../controllers/certificate.controller.js";
 import { upload } from "../middlewares/multer.middleware.js";
+import { checkAdminPassword } from "../middlewares/authMiddleware.js";
 
 const router = Router();
 
 // Upload Certificate
 router.post(
-  "/upload_certificate", 
+  "/upload_certificate",
+  checkAdminPassword,
   upload.single("certificateImage"),
   uploadCertificate,
 );

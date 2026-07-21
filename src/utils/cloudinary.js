@@ -4,6 +4,13 @@ import dotenv from "dotenv";
 
 dotenv.config();
 
+let Cloudinary_Folder;
+if (process.env.NODE_ENV == "development") {
+  Cloudinary_Folder = "portfolio_server_development";
+} else {
+  Cloudinary_Folder = "portfolio_server";
+}
+
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
   api_key: process.env.CLOUDINARY_API_KEY,
@@ -13,11 +20,13 @@ cloudinary.config({
 const uploadOnCloudinary = async (localFilePath, folderName = "general") => {
   try {
     if (!localFilePath) return null;
-    console.log(`Image Upload Start in folder: portfolio_server/${folderName}`);
+    console.log(
+      `Image Upload Start in folder: ${Cloudinary_Folder}/${folderName}`,
+    );
 
     const response = await cloudinary.uploader.upload(localFilePath, {
       resource_type: "auto",
-      folder: `portfolio_server/${folderName}`,
+      folder: `${Cloudinary_Folder}/${folderName}`,
       timeout: 60000,
     });
 

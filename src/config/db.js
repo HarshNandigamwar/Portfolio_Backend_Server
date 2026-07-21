@@ -12,9 +12,14 @@ const startSpinner = (text) => {
 
 const connectDB = async () => {
   const spinner = startSpinner("Connecting to MongoDB...");
-
+  let MONGODB_URL;
+  if (process.env.NODE_ENV == "development") {
+    MONGODB_URL = process.env.MONGODB_URI_DEVELOPMENT;
+  } else {
+    MONGODB_URL = process.env.MONGODB_URI;
+  }
   try {
-    const conn = await mongoose.connect(process.env.MONGODB_URI);
+    const conn = await mongoose.connect(MONGODB_URL);
     clearInterval(spinner);
     process.stdout.write(`\r📡 MongoDB Connected: ${conn.connection.host}\n`);
   } catch (error) {
