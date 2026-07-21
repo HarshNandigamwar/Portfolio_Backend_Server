@@ -1,11 +1,16 @@
 import { Router } from "express";
-import { uploadCourse, getCourses } from "../controllers/course.controller.js";
+import {
+  uploadCourse,
+  getCourses,
+  updateCourse,
+  deleteCourse,
+} from "../controllers/course.controller.js";
 import { upload } from "../middlewares/multer.middleware.js";
 import { checkAdminPassword } from "../middlewares/authMiddleware.js";
 
 const router = Router();
 
-//Upload Course Route
+// Create - Upload Course
 router.post(
   "/upload_course",
   checkAdminPassword,
@@ -13,7 +18,18 @@ router.post(
   uploadCourse,
 );
 
-//Get Course Route
+// Read - Get Course
 router.get("/get_course", getCourses);
+
+// Update Course
+router.put(
+  "/update_course/:id",
+  checkAdminPassword,
+  upload.single("certificateImage"),
+  updateCourse,
+);
+
+// Delete Certificate
+router.delete("/delete_course/:id", checkAdminPassword, deleteCourse);
 
 export default router;

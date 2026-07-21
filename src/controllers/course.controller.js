@@ -97,3 +97,131 @@ export const getCourses = async (req, res) => {
     });
   }
 };
+
+// Update Course Controller
+export const updateCourse = async (req, res) => {
+  // Track newly uploaded Cloudinary response so we can roll it back if DB save fails
+  let newCloudinaryResponse = null;
+
+  try {
+    const { id } = req.params;
+
+    const course = await Course.findById(id);
+
+    if (!course) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Course not found!" });
+    }
+
+    const { courseName, courseDescription, verifyCredentialLink, keySkills } =
+      req.body;
+
+    // Parse keySkills only if it was actually sent
+    let parsedKeySkills;
+    if (typeof keySkills === "string") {
+      parsedKeySkills = keySkills.split(",").map((skill) => skill.trim());
+    } else if (Array.isArray(keySkills)) {
+      parsedKeySkills = keySkills;
+    }
+
+    const oldPublicId = course.certificateImagePublicId;
+
+    // If a new image is provided, upload it first (don't delete old one yet)
+    if (req.file) {
+      newCloudinaryResponse = await uploadOnCloudinary(
+        req.file.path,
+        "portfolio_courses",
+      );
+
+      if (!newCloudinaryResponse) {
+        return res.status(500).json({
+          success: false,
+          message: "Failed to upload image to Cloudinary",
+        });
+      }
+
+      course.certificateImage = newCloudinaryResponse.secure_url;
+      course.certificateImagePublicId = newCloudinaryResponse.public_id;
+    }
+
+    if (courseName) course.courseName = courseName;
+    if (courseDescription) course.courseDescription = courseDescription;
+    if (verifyCredentialLink) course.verifyCredentialLink = verifyCredentialLink;
+    if (parsedKeySkills) course.keySkills = parsedKeySkills;
+
+    const updatedCourse = await course.save();
+
+    // DB save succeeded — now safe to delete the old image (if a new one replaced it)
+    if (req.file && oldPublicId) {
+      await cloudinary.uploader.destroy(oldPublicId).catch((err) => {
+        console.error("Failed to delete old Cloudinary image:", err.message);
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Course updated successfully!",
+      data: updatedCourse,
+    });
+  } catch (error) {
+    console.error("Error in updateCourse:", error);
+
+    // DB save failed but new image was uploaded — clean up the orphaned upload
+    if (newCloudinaryResponse?.public_id) {
+      await cloudinary.uploader
+        .destroy(newCloudinaryResponse.public_id)
+        .catch((err) => {
+          console.error("Failed to rollback Cloudinary upload:", err.message);
+        });
+    }
+
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+      error: error.message,
+    });
+  }
+};
+
+// Delete Course Controller
+export const deleteCourse = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Find the course first so we have the Cloudinary public_id before deleting
+    const course = await Course.findById(id);
+
+    if (!course) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Course not found!" });
+    }
+
+    // Delete the course document from MongoDB
+    await Course.findByIdAndDelete(id);
+
+    // Delete the associated image from Cloudinary (if it exists)
+    if (course.certificateImagePublicId) {
+      await cloudinary.uploader
+        .destroy(course.certificateImagePublicId)
+        .catch((err) => {
+          // Log but don't fail the request — DB record is already deleted
+          console.error("Failed to delete Cloudinary image:", err.message);
+        });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Course deleted successfully!",
+      data: course,
+    });
+  } catch (error) {
+    console.error("Error in deleteCourse:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+      error: error.message,
+    });
+  }
+};
