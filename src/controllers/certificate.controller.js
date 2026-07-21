@@ -1,6 +1,5 @@
 import { Certificate } from "../models/certificate.model.js";
-import { uploadOnCloudinary } from "../utils/cloudinary.js";
-import { v2 as cloudinary } from "cloudinary";
+import { uploadOnCloudinary, cloudinary } from "../utils/cloudinary.js";
 
 // Certificate Upload Controller
 export const uploadCertificate = async (req, res) => {

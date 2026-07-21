@@ -1,8 +1,11 @@
 import { Course } from "../models/course.model.js";
-import { uploadOnCloudinary } from "../utils/cloudinary.js";
+import { uploadOnCloudinary, cloudinary } from "../utils/cloudinary.js"; 
 
 //Course Upload Controller
 export const uploadCourse = async (req, res) => {
+  // Track uploaded Cloudinary response so we can roll it back if DB save fails
+  let cloudinaryResponse = null;
+
   try {
     const { courseName, courseDescription, verifyCredentialLink, keySkills } =
       req.body;
@@ -26,7 +29,8 @@ export const uploadCourse = async (req, res) => {
       parsedKeySkills = keySkills;
     }
 
-    const cloudinaryResponse = await uploadOnCloudinary(
+    // Upload the course certificate image to Cloudinary
+    cloudinaryResponse = await uploadOnCloudinary(
       req.file.path,
       "portfolio_courses",
     );
@@ -44,6 +48,7 @@ export const uploadCourse = async (req, res) => {
       verifyCredentialLink,
       keySkills: parsedKeySkills,
       certificateImage: cloudinaryResponse.secure_url,
+      certificateImagePublicId: cloudinaryResponse.public_id,
     });
 
     return res.status(201).json({
@@ -53,6 +58,17 @@ export const uploadCourse = async (req, res) => {
     });
   } catch (error) {
     console.error("Error in uploadCourse:", error);
+
+    // If the image was uploaded to Cloudinary but the DB save failed,
+    // delete the orphaned image so it doesn't stay unused on Cloudinary
+    if (cloudinaryResponse?.public_id) {
+      await cloudinary.uploader
+        .destroy(cloudinaryResponse.public_id)
+        .catch((err) => {
+          console.error("Failed to rollback Cloudinary upload:", err.message);
+        });
+    }
+
     return res.status(500).json({
       success: false,
       message: "Internal Server Error",
