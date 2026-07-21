@@ -42,6 +42,10 @@ const experienceSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    certificateImagePublicId: {
+      type: String,
+      required: true,
+    },
   },
   { timestamps: true },
 );
