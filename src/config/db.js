@@ -9,7 +9,7 @@ const startSpinner = (text) => {
     process.stdout.write(`\r${frames[(i = ++i % frames.length)]} ${text}`);
   }, 80);
 };
-
+ 
 const connectDB = async () => {
   const spinner = startSpinner("Connecting to MongoDB...");
   let MONGODB_URL;
