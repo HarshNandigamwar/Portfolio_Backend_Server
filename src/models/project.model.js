@@ -16,6 +16,10 @@ const projectSchema = new mongoose.Schema(
       type: String,
       required: true,
     },
+    projectImagePublicId: {
+      type: String,
+      required: true,
+    },
     githubFrontendLink: {
       type: String,
       trim: true,
