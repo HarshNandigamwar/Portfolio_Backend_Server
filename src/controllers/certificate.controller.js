@@ -191,3 +191,45 @@ export const updateCertificate = async (req, res) => {
     });
   }
 };
+
+// Delete Certificate Controller
+export const deleteCertificate = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // Find the certificate first so we have the Cloudinary public_id before deleting
+    const certificate = await Certificate.findById(id);
+
+    if (!certificate) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Certificate not found!" });
+    }
+
+    // Delete the certificate document from MongoDB
+    await Certificate.findByIdAndDelete(id);
+
+    // Delete the associated image from Cloudinary (if it exists)
+    if (certificate.certificateImagePublicId) {
+      await cloudinary.uploader
+        .destroy(certificate.certificateImagePublicId)
+        .catch((err) => {
+          // Log but don't fail the request — DB record is already deleted
+          console.error("Failed to delete Cloudinary image:", err.message);
+        });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Certificate deleted successfully!",
+      data: certificate,
+    });
+  } catch (error) {
+    console.error("Error in deleteCertificate:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Internal Server Error",
+      error: error.message,
+    });
+  }
+};
