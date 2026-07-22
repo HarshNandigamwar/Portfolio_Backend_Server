@@ -95,16 +95,30 @@ const safeCompare = (a, b) => {
 };
 
 // Cookie Configuration Helper
+// const getCookieOptions = () => {
+//   const isProd = process.env.NODE_ENV === "production";
+//   return {
+//     httpOnly: true,
+//     secure: isProd, 
+//     sameSite: isProd ? "none" : "lax",
+//     path: "/", // Available across all routes
+//     maxAge: 24 * 60 * 60 * 1000, // 24 hours
+//   };
+// };
+
 const getCookieOptions = () => {
   const isProd = process.env.NODE_ENV === "production";
   return {
     httpOnly: true,
-    secure: isProd, 
+    // Production (Vercel) par secure MUST be true (HTTPS required)
+    secure: isProd ? true : false,
+    // Cross-domain cookies (Vercel -> Backend) ke liye 'none' mandatory hai
     sameSite: isProd ? "none" : "lax",
-    path: "/", // Available across all routes
+    path: "/",
     maxAge: 24 * 60 * 60 * 1000, // 24 hours
   };
 };
+
 
 // Admin Login Controller
 export const adminLogin = async (req, res) => {
